@@ -5,7 +5,7 @@ import itchat
 from itchat.content import *
 
 # 微信消息接收
-from wechat_msg_backup import note_type
+from wechat_msg_backup import note_type, backup
 from wechat_push import msg_type
 
 
@@ -14,7 +14,7 @@ from wechat_push import msg_type
 def get_msg(msg):
     print('获取微信消息')
     msg_type(msg)
-    note_type(msg)
+    backup(msg)
 
 
 # 接收通知类型消息

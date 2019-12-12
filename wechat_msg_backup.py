@@ -17,8 +17,6 @@ def note_type(msg):
         if '撤回了一条消息' in msg['Content']:
             print('撤回消息处理')
             backup_push(msg)
-    else:
-        backup(msg)
 
 
 # 把消息备份起来
