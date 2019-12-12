@@ -9,9 +9,6 @@ msg_information = {}
 face_bug = None  # 针对表情包的内容
 
 
-# 通知消息发送群
-
-
 # 关于通知文本处理
 def note_type(msg):
     if msg['Type'] == 'Note':  # 通知文本

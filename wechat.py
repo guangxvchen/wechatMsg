@@ -27,7 +27,7 @@ def get_note(msg):
 def keep_alive():
     itchat.send_msg('alive', 'filehelper')
     global timer
-    timer = threading.Timer(60 * 60, keep_alive)  # 每十分钟发送一次
+    timer = threading.Timer(60 * 60 * 3, keep_alive)  # 每 3 小时发送一次
     timer.start()
 
 
