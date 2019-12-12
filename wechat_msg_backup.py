@@ -27,11 +27,12 @@ def note_type(msg):
 # 把消息备份起来
 def backup(msg):
     print('消息备份')
-    if 'ActualNickName' in msg:
-        msg_from = msg['ActualNickName']
-    else:
-        user_msg = itchat.search_friends(userName=msg['FromUserName'])
-        msg_from = user_msg['NickName'] if (user_msg['RemarkName'] == '') else user_msg['RemarkName']
+    # if 'ActualNickName' in msg:
+    #     msg_from = msg['ActualNickName']
+    # else:
+    # 直接获取用户昵称
+    user_msg = itchat.search_friends(userName=msg['FromUserName'])
+    msg_from = user_msg['NickName']  # if (user_msg['RemarkName'] == '') else user_msg['RemarkName']
     global face_bug
     msg_id = msg['MsgId']  # 每条信息的id
     msg_content = None  # 储存信息的内容

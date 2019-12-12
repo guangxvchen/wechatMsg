@@ -5,8 +5,6 @@ import requests
 
 from db_msg_type import *
 
-gl = globals()
-gl['fast'] = 0
 meHelp = '''【提示信息】
 
 add: 订阅【人民日报】【央视新闻】早班新闻
@@ -24,8 +22,7 @@ def msg_type(msg):
     elif msg['Type'] == 'Text':
         friend = itchat.search_friends(userName=msg['FromUserName'])
         nickName = friend['NickName']
-        itchat.send_msg(nickName, groupUserName)
-        itchat.send_msg(msg['Text'], groupUserName)
+        itchat.send_msg(nickName + ': \n' + msg['Text'], groupUserName)
         if msg['Text'] == 'add':
             del_users(nickName)
             itchat.send_msg('订阅成功: ' + nickName, msg['FromUserName'])
@@ -38,7 +35,6 @@ def msg_type(msg):
 
 # 微信消息发送
 def push(title, url):
-
     groupUserName = itchat.search_chatrooms('oooo')[0]['UserName']
     # 指定群的 UserName
     groupUserNames = get_group_username()
@@ -50,15 +46,12 @@ def push(title, url):
     # 发送好友
     for user in userUserNames:
         # 用于首次发送提示信息
-        if fast == 0:
-            itchat.send_msg(meHelp, user)
         itchat.send_msg(title, user)
         itchat.send_msg(url, user)
     # # 发送群组
     for group in groupUserNames:
         itchat.send_msg(title, group)
         itchat.send_msg(url, group)
-    gl['fast'] = 1
 
 
 # 获取指定群的 UserName # 用于发送信息
