@@ -26,6 +26,10 @@ def backup(msg):
     #     msg_from = msg['ActualNickName']
     # else:
     # 直接获取用户昵称
+    # 如果是自己 / 不备份
+    me = itchat.get_friends(update=True)[:1]
+    if msg['FromUserName'] is me:
+        return
     user_msg = itchat.search_friends(userName=msg['FromUserName'])
     if None is user_msg:
         print("不备份公众号推送~")

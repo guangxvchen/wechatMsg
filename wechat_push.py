@@ -22,7 +22,10 @@ def msg_type(msg):
     elif msg['Type'] == 'Text':
         friend = itchat.search_friends(userName=msg['FromUserName'])
         nickName = friend['NickName']
-        itchat.send_msg(nickName + ': \n' + msg['Text'], groupUserName)
+        # 如果是自己 / 不发送信息到通知群
+        me = itchat.get_friends(update=True)[:1]
+        if msg['FromUserName'] is not me:
+            itchat.send_msg(nickName + ': \n' + msg['Text'], groupUserName)
         if msg['Text'] == 'add':
             del_users(nickName)
             itchat.send_msg('订阅成功: ' + nickName, msg['FromUserName'])
@@ -35,14 +38,11 @@ def msg_type(msg):
 
 # 微信消息发送
 def push(title, url):
-    groupUserName = itchat.search_chatrooms('oooo')[0]['UserName']
     # 指定群的 UserName
     groupUserNames = get_group_username()
     # 指定好友的 UserName
     userUserNames = get_user_username()
-    print(groupUserName)
-    itchat.send_msg(title, groupUserName)
-    itchat.send_msg(url, groupUserName)
+
     # 发送好友
     for user in userUserNames:
         # 用于首次发送提示信息
