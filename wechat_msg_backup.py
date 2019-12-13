@@ -93,14 +93,14 @@ def backup_push(msg):
     old_msg = msg_information.get(old_msg_id)  # 得到消息
     # print(old_msg)
     if len(old_msg_id) < 11:  # 如果发送的是表情包
-        itchat.send_msg(face_bug, groupUserName)
+        itchat.send_file(face_bug, toUserName=groupUserName)
     else:  # 发送撤回的提示给文件助手
         msg_body = old_msg.get('msg_from') + ":\n" + time.strftime("%H:%M\n",
                                                                    time.localtime()) + "撤回" + old_msg.get(
             "msg_type") + "\n" + "\n" + old_msg.get('msg_content')
         # 如果是分享的文件被撤回了，那么就将分享的url加在msg_body中发送给文件助手
         if old_msg['msg_type'] == "Sharing":
-            msg_body += "\n➣\n" + old_msg.get('msg_share_url')
+            msg_body += "\n" + old_msg.get('msg_share_url')
 
         # 将撤回消息发送到文件助手
         itchat.send_msg(msg_body, groupUserName)
@@ -110,7 +110,7 @@ def backup_push(msg):
                 or old_msg["msg_type"] == "Video" \
                 or old_msg["msg_type"] == "Attachment":
             file = '@fil@%s' % (old_msg['msg_content'])
-            itchat.send_msg(file, groupUserName)
+            itchat.send(msg=file, toUserName=groupUserName)
             os.remove(old_msg['msg_content'])
         # 删除字典旧消息
         msg_information.pop(old_msg_id)
