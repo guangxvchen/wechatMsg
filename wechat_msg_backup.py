@@ -27,8 +27,8 @@ def backup(msg):
     # else:
     # 直接获取用户昵称
     # 如果是自己 / 不备份
-    me = itchat.get_friends(update=True)[:1]
-    if msg['FromUserName'] is me:
+    me = itchat.get_friends(update=True)[:1][0]['UserName']
+    if msg['FromUserName'] == me:
         return
     user_msg = itchat.search_friends(userName=msg['FromUserName'])
     if None is user_msg:

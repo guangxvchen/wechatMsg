@@ -13,7 +13,6 @@ del: 取消订阅'''
 
 def msg_type(msg):
     print('消息处理')
-    groupUserName = itchat.search_chatrooms('oooo')[0]['UserName']
     if 49 == msg['MsgType']:
         if '来了！新闻早班车' in msg['Text'] or '早啊！新闻来了' in msg['Text']:
             title = msg['Text']
@@ -23,9 +22,10 @@ def msg_type(msg):
         friend = itchat.search_friends(userName=msg['FromUserName'])
         nickName = friend['NickName']
         # 如果是自己 / 不发送信息到通知群
-        me = itchat.get_friends(update=True)[:1]
-        if msg['FromUserName'] is not me:
-            itchat.send_msg(nickName + ': \n' + msg['Text'], groupUserName)
+        me = itchat.get_friends(update=True)[:1][0]['UserName']
+        if msg['FromUserName'] != me:
+            groupUserName = itchat.search_chatrooms('oooo')[0]['UserName']
+            itchat.send_msg(nickName + ': \n\t' + msg['Text'], groupUserName)
         if msg['Text'] == 'add':
             del_users(nickName)
             itchat.send_msg('订阅成功: ' + nickName, msg['FromUserName'])
@@ -91,6 +91,6 @@ def get_user_username():
 # 把长连接转换为短连接
 def short_url(url, title):
     data = {'urlValue': url, 'title': title}
-    baseUrl = 'http://一chengx.top'
+    baseUrl = 'http://localhost'
     rep = requests.post(baseUrl, json=data)
     return rep.json()['data']
