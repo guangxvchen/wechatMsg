@@ -1,5 +1,6 @@
 # coding:utf-8
 import threading
+import time
 
 import itchat
 from itchat.content import *
@@ -24,16 +25,23 @@ def get_note(msg):
     note_type(msg)
 
 
+# 存活
+def alive():
+    msg = time.strftime("%Y-%m-%d %H:%M.%S", time.localtime())
+    print(msg)
+    itchat.send_msg(msg, 'filehelper')
+    keep_alive()
+
+
+# 定时
 def keep_alive():
-    itchat.send_msg('alive', 'filehelper')
     global timer
-    timer = threading.Timer(60 * 60 * 3, keep_alive)  # 每 3 小时发送一次
+    timer = threading.Timer(60 * 60 * 5, alive)  # 每 5 小时执行一次
     timer.start()
 
 
 # 微信登录
 if __name__ == '__main__':
-    timer = threading.Timer(60 * 10, keep_alive)
-    timer.start()
+    keep_alive()
     itchat.auto_login(hotReload=True)
     itchat.run()
