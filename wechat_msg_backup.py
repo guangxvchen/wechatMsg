@@ -27,6 +27,9 @@ def backup(msg):
     # else:
     # 直接获取用户昵称
     user_msg = itchat.search_friends(userName=msg['FromUserName'])
+    if None is user_msg:
+        print("不备份公众号推送~")
+        return
     msg_from = user_msg['NickName']  # if (user_msg['RemarkName'] == '') else user_msg['RemarkName']
     global face_bug
     msg_id = msg['MsgId']  # 每条信息的id
