@@ -43,5 +43,5 @@ def keep_alive():
 # 微信登录
 if __name__ == '__main__':
     keep_alive()
-    itchat.auto_login(hotReload=True)
+    itchat.auto_login(hotReload=True, enableCmdQR=2)
     itchat.run()

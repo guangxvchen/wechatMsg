@@ -91,6 +91,6 @@ def get_user_username():
 # 把长连接转换为短连接
 def short_url(url, title):
     data = {'urlValue': url, 'title': title}
-    baseUrl = 'http://localhost'
+    baseUrl = 'http://一chengx.top'
     rep = requests.post(baseUrl, json=data)
     return rep.json()['data']
