@@ -16,7 +16,7 @@ def msg_type(msg):
     if 49 == msg['MsgType']:
         if '来了！新闻早班车' in msg['Text'] or '早啊！新闻来了' in msg['Text']:
             title = msg['Text']
-            url = short_url(msg['Url'], title)
+            url = short_url(msg['Url'], title).replace(':80', '')
             push(title, url)
     elif msg['Type'] == 'Text':
         friend = itchat.search_friends(userName=msg['FromUserName'])
