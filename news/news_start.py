@@ -6,14 +6,13 @@ import itchat
 from itchat.content import *
 
 # 微信消息接收
-from wechat_msg_backup import note_type, backup
-from wechat_push import msg_type
+from news.news_msg_util import note_type, backup
+from news.news_uri_push import msg_type
 
 
 @itchat.msg_register([TEXT, PICTURE, FRIENDS, CARD, MAP, SHARING, RECORDING, ATTACHMENT, VIDEO], isFriendChat=True,
                      isGroupChat=False, isMpChat=True)
 def get_msg(msg):
-    print('获取微信消息')
     msg_type(msg)
     backup(msg)
 
@@ -21,7 +20,6 @@ def get_msg(msg):
 # 接收通知类型消息
 @itchat.msg_register(NOTE, isFriendChat=True, isGroupChat=False, isMpChat=True)
 def get_note(msg):
-    print('获取通知文本')
     note_type(msg)
 
 
@@ -36,7 +34,7 @@ def alive():
 # 定时
 def keep_alive():
     global timer
-    timer = threading.Timer(60 * 60 * 5, alive)  # 每 5 小时执行一次
+    timer = threading.Timer(60 * 60 * 12, alive)  # 每 12 小时执行一次
     timer.start()
 
 

@@ -8,20 +8,23 @@ import itchat
 msg_information = {}
 face_bug = None  # 针对表情包的内容
 
+blacklists = []
+delete_lists = []
+
 
 # 关于通知文本处理
 def note_type(msg):
-    if msg['Type'] == 'Note':  # 通知文本
-        print('通知文本处理')
-        # 撤回消息处理
-        if '撤回了一条消息' in msg['Content']:
-            print('撤回消息处理')
+    if '撤回了一条消息' in msg['Content']:
+        if '你撤回了一条消息' not in msg['Content']:
             backup_push(msg)
+    elif '对方拒收' in msg['Content']:
+        blacklist(msg)
+    elif '朋友验证' in msg['Content']:
+        delete_list(msg)
 
 
 # 把消息备份起来
 def backup(msg):
-    print('消息备份')
     # if 'ActualNickName' in msg:
     #     msg_from = msg['ActualNickName']
     # else:
@@ -32,7 +35,6 @@ def backup(msg):
         return
     user_msg = itchat.search_friends(userName=msg['FromUserName'])
     if None is user_msg:
-        print("不备份公众号推送~")
         return
     msg_from = user_msg['NickName']  # if (user_msg['RemarkName'] == '') else user_msg['RemarkName']
     global face_bug
@@ -86,8 +88,7 @@ def backup(msg):
 # 这个是用于监听是否有消息撤回
 def backup_push(msg):
     # 发送信息到通知群
-    groupUserName = itchat.search_chatrooms('oooo')[0]['UserName']
-    print('消息撤回')
+    groupUserName = itchat.search_chatrooms('uuuu')[0]['UserName']
     # 这里如果这里的msg['Content']中包含消息撤回和id，就执行下面的语句
     old_msg_id = re.search("\<msgid\>(.*?)\<\/msgid\>", msg['Content']).group(1)  # 在返回的content查找撤回的消息的id
     old_msg = msg_information.get(old_msg_id)  # 得到消息
@@ -95,22 +96,51 @@ def backup_push(msg):
     if len(old_msg_id) < 11:  # 如果发送的是表情包
         itchat.send_file(face_bug, toUserName=groupUserName)
     else:  # 发送撤回的提示给文件助手
-        msg_body = old_msg.get('msg_from') + ":\n" + time.strftime("%H:%M\n",
-                                                                   time.localtime()) + "撤回" + old_msg.get(
-            "msg_type") + "\n" + "\n" + old_msg.get('msg_content')
-        # 如果是分享的文件被撤回了，那么就将分享的url加在msg_body中发送给文件助手
-        if old_msg['msg_type'] == "Sharing":
-            msg_body += "\n" + old_msg.get('msg_share_url')
+        try:
+            msg_body = old_msg.get('msg_from') + ":\n" + time.strftime("%H:%M\n",
+                                                                       time.localtime()) + "撤回" + old_msg.get(
+                "msg_type") + "\n" + "\n" + old_msg.get('msg_content')
+            # 如果是分享的文件被撤回了，那么就将分享的url加在msg_body中发送给文件助手
+            if old_msg['msg_type'] == "Sharing":
+                msg_body += "\n" + old_msg.get('msg_share_url')
 
-        # 将撤回消息发送到文件助手
-        itchat.send_msg(msg_body, groupUserName)
-        # 有文件的话也要将文件发送回去
-        if old_msg["msg_type"] == "Picture" \
-                or old_msg["msg_type"] == "Recording" \
-                or old_msg["msg_type"] == "Video" \
-                or old_msg["msg_type"] == "Attachment":
-            file = '@fil@%s' % (old_msg['msg_content'])
-            itchat.send(msg=file, toUserName=groupUserName)
-            os.remove(old_msg['msg_content'])
-        # 删除字典旧消息
-        msg_information.pop(old_msg_id)
+            # 将撤回消息发送到文件助手
+            itchat.send_msg(msg_body, groupUserName)
+            # 有文件的话也要将文件发送回去
+            if old_msg["msg_type"] == "Picture" \
+                    or old_msg["msg_type"] == "Recording" \
+                    or old_msg["msg_type"] == "Video" \
+                    or old_msg["msg_type"] == "Attachment":
+                file = '@fil@%s' % (old_msg['msg_content'])
+                itchat.send(msg=file, toUserName=groupUserName)
+                os.remove(old_msg['msg_content'])
+            # 删除字典旧消息
+            msg_information.pop(old_msg_id)
+        except Exception:
+            print("另一个号撤回消息")
+
+
+# 被拉黑名单
+def blacklist(msg):
+    user = itchat.search_friends(userName=msg['FromUserName'])
+    blacklists.append(user['NickName'] + ' -- ' + user['RemarkName'])
+
+
+# 被删除名单
+def delete_list(msg):
+    msg = msg['Content']
+    delete_lists.append(msg[0:msg.index('开启了朋友验证')])
+
+
+# 获取当前所有单方面非好友集合
+# 获取一波非好友
+def not_friends():
+    groupUserName = itchat.search_chatrooms('uuuu')[0]['UserName']
+    itchat.send_msg('被删除\n' + str(delete_lists) + '\n被拉黑\n' + str(blacklists), groupUserName)
+    return '被删除\n' + str(delete_lists) + '\n被拉黑\n' + str(blacklists)
+
+
+# 清空数据
+def clean_not_friends():
+    delete_lists.clear()
+    blacklists.clear()

@@ -3,7 +3,7 @@
 import itchat
 import requests
 
-from db_msg_type import *
+from news.db_msg_type import *
 
 meHelp = '''【提示信息】
 
@@ -12,7 +12,6 @@ del: 取消订阅'''
 
 
 def msg_type(msg):
-    print('消息处理')
     if 49 == msg['MsgType']:
         if '来了！新闻早班车' in msg['Text'] or '早啊！新闻来了' in msg['Text']:
             title = msg['Text']
@@ -24,7 +23,7 @@ def msg_type(msg):
         # 如果是自己 / 不发送信息到通知群
         me = itchat.get_friends(update=True)[:1][0]['UserName']
         if msg['FromUserName'] != me:
-            groupUserName = itchat.search_chatrooms('oooo')[0]['UserName']
+            groupUserName = itchat.search_chatrooms('uuuu')[0]['UserName']
             itchat.send_msg(nickName + ': \n\t' + msg['Text'], groupUserName)
         if msg['Text'] == 'add':
             del_users(nickName)
