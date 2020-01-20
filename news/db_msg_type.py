@@ -1,4 +1,4 @@
-from news import db_properties
+import db_properties
 
 
 # 通过用户名判断是否有数据

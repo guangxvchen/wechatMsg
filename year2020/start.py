@@ -2,7 +2,7 @@ import itchat
 from itchat.content import *
 
 # 微信消息接收
-from year2020.new_msg_util import not_friends, clean_not_friends, note_type, backup
+from new_msg_util import not_friends, clean_not_friends, note_type, backup
 
 
 # 不获取群信息

@@ -6,8 +6,8 @@ import itchat
 from itchat.content import *
 
 # 微信消息接收
-from news.news_msg_util import note_type, backup
-from news.news_uri_push import msg_type
+from news_msg_util import note_type, backup
+from news_uri_push import msg_type
 
 
 @itchat.msg_register([TEXT, PICTURE, FRIENDS, CARD, MAP, SHARING, RECORDING, ATTACHMENT, VIDEO], isFriendChat=True,

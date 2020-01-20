@@ -3,7 +3,7 @@
 import itchat
 import requests
 
-from news.db_msg_type import *
+from db_msg_type import *
 
 meHelp = '''【提示信息】
 
