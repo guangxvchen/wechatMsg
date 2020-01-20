@@ -1,1 +1,28 @@
 `重复文件 new_msg_util.py == news_msg_util.py`
+
+git clone https://github.com/guangxvchen/wechatMsg.git
+cd wechatMsg/
+
+虚拟环境
+pip3 install virtualenv
+
+--no-site-packages 已经安装到系统Python环境中的所有第三方包都不会复制过来
+virtualenv --no-site-packages year2020/
+virtualenv --no-site-packages news/
+
+所以要到每个虚拟环境下边安装自己需要的包
+cd year2020/
+pip install itchat
+
+cd news/
+pip install itchat
+pip install pymysql
+
+执行各自的 start.py
+nohup python3 start.py > out.log &
+
+首次登陆是使用命令行二维码登陆的
+使用 vi/vim 打开 日志文件 进行扫码
+vim out.log
+使用 tail -f 命令监听日志
+tail -f out.log
