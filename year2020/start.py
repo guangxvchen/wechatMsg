@@ -12,7 +12,6 @@ def new_year(msg):
     if msg['ToUserName'] == 'filehelper':
         if '发送人' in msg['Content'][0:3]:
             # 要发送的消息
-            sendMsg = text_br_index(msg['Content'][3:])
             # 所有好友
             users = itchat.get_friends(update=True)
             for user in users[1:]:
@@ -28,7 +27,7 @@ def new_year(msg):
                             祝福语
                         end;
                     '''
-                    sendMsg = petName + ':\n' + sendMsg
+                    sendMsg = petName + ':\n' + text_br_index(msg['Content'][3:])
                     # 发送消息
                     itchat.send_msg(sendMsg, user['UserName'])
             print('所有用户数量: ' + len(users))
