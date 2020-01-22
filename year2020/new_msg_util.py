@@ -137,6 +137,7 @@ def delete_list(msg):
 def not_friends():
     groupUserName = itchat.search_chatrooms('uuuu')[0]['UserName']
     itchat.send_msg('被删除\n' + str(delete_lists) + '\n被拉黑\n' + str(blacklists), groupUserName)
+    itchat.send_msg('被 %d 人删除\n被 %d 人拉黑' % (len(delete_lists), len(blacklists)), groupUserName)
     return '被删除\n' + str(delete_lists) + '\n被拉黑\n' + str(blacklists)
 
 

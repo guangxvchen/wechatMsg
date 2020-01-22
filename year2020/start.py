@@ -57,7 +57,8 @@ def new_year(msg):
         elif '清空' == msg['Content']:
             # 获取非好友对象
             print(clean_not_friends())
-        itchat.send_msg('未发送\n' + str(not_send), groupUserName)
+        elif '未发送' == msg['Content']:
+            itchat.send_msg('未发送\n' + str(not_send), groupUserName)
     else:
         # 如果是接收到好友发送的消息, 则进行备份, 用户
         backup(msg)
