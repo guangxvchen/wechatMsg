@@ -96,28 +96,25 @@ def backup_push(msg):
     if len(old_msg_id) < 11:  # 如果发送的是表情包
         itchat.send_file(face_bug, toUserName=groupUserName)
     else:  # 发送撤回的提示给文件助手
-        try:
-            msg_body = old_msg.get('msg_from') + ":\n" + time.strftime("%H:%M\n",
-                                                                       time.localtime()) + "撤回" + old_msg.get(
-                "msg_type") + "\n" + "\n" + old_msg.get('msg_content')
-            # 如果是分享的文件被撤回了，那么就将分享的url加在msg_body中发送给文件助手
-            if old_msg['msg_type'] == "Sharing":
-                msg_body += "\n" + old_msg.get('msg_share_url')
+        msg_body = old_msg.get('msg_from') + ":\n" + time.strftime("%H:%M\n",
+                                                                   time.localtime()) + "撤回" + old_msg.get(
+            "msg_type") + "\n" + "\n" + old_msg.get('msg_content')
+        # 如果是分享的文件被撤回了，那么就将分享的url加在msg_body中发送给文件助手
+        if old_msg['msg_type'] == "Sharing":
+            msg_body += "\n" + old_msg.get('msg_share_url')
 
-            # 将撤回消息发送到文件助手
-            itchat.send_msg(msg_body, groupUserName)
-            # 有文件的话也要将文件发送回去
-            if old_msg["msg_type"] == "Picture" \
-                    or old_msg["msg_type"] == "Recording" \
-                    or old_msg["msg_type"] == "Video" \
-                    or old_msg["msg_type"] == "Attachment":
-                file = '@fil@%s' % (old_msg['msg_content'])
-                itchat.send(msg=file, toUserName=groupUserName)
-                os.remove(old_msg['msg_content'])
-            # 删除字典旧消息
-            msg_information.pop(old_msg_id)
-        except Exception:
-            print("另一个号撤回消息")
+        # 将撤回消息发送到文件助手
+        itchat.send_msg(msg_body, groupUserName)
+        # 有文件的话也要将文件发送回去
+        if old_msg["msg_type"] == "Picture" \
+                or old_msg["msg_type"] == "Recording" \
+                or old_msg["msg_type"] == "Video" \
+                or old_msg["msg_type"] == "Attachment":
+            file = '@fil@%s' % (old_msg['msg_content'])
+            itchat.send(msg=file, toUserName=groupUserName)
+            os.remove(old_msg['msg_content'])
+        # 删除字典旧消息
+        msg_information.pop(old_msg_id)
 
 
 # 被拉黑名单
