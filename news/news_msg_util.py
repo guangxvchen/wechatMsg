@@ -17,10 +17,6 @@ def note_type(msg):
     if '撤回了一条消息' in msg['Content']:
         if '你撤回了一条消息' not in msg['Content']:
             backup_push(msg)
-    elif '对方拒收' in msg['Content']:
-        blacklist(msg)
-    elif '朋友验证' in msg['Content']:
-        delete_list(msg)
 
 
 # 把消息备份起来
@@ -116,28 +112,3 @@ def backup_push(msg):
         # 删除字典旧消息
         msg_information.pop(old_msg_id)
 
-
-# 被拉黑名单
-def blacklist(msg):
-    user = itchat.search_friends(userName=msg['FromUserName'])
-    blacklists.append(user['NickName'] + ' -- ' + user['RemarkName'])
-
-
-# 被删除名单
-def delete_list(msg):
-    msg = msg['Content']
-    delete_lists.append(msg[0:msg.index('开启了朋友验证')])
-
-
-# 获取当前所有单方面非好友集合
-# 获取一波非好友
-def not_friends():
-    groupUserName = itchat.search_chatrooms('uuuu')[0]['UserName']
-    itchat.send_msg('被删除\n' + str(delete_lists) + '\n被拉黑\n' + str(blacklists), groupUserName)
-    return '被删除\n' + str(delete_lists) + '\n被拉黑\n' + str(blacklists)
-
-
-# 清空数据
-def clean_not_friends():
-    delete_lists.clear()
-    blacklists.clear()

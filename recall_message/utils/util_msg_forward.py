@@ -10,5 +10,6 @@ def send_receive_msg(msg):
     if msg['FromUserName'] == me:
         return
     msg_from_user_info = itchat.search_friends(userName=msg['FromUserName'])
-    msg_from_user_info['Sex'] + '-' + msg_from_user_info['RemarkName'] + '-' + msg_from_user_info['NickName']
+    forName = str(msg_from_user_info['Sex']) + '-' + msg_from_user_info['RemarkName'] + '-' + msg_from_user_info['NickName'] + '-' + str(msg_from_user_info['Uin'])
+    print(forName)
 

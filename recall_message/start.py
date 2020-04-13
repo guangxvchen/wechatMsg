@@ -5,18 +5,18 @@ from utils.util_msg_forward import *
 
 
 help = """
-1 : 撤回模式开启/关闭
+1 : 防撤回模式开启/关闭
 """
 
 
 # 微信消息接收
+# isGroupChat=False 关闭接收群消息
 @itchat.msg_register([TEXT, PICTURE, FRIENDS, CARD, MAP, SHARING, RECORDING, ATTACHMENT, VIDEO], isFriendChat=True,
                      isGroupChat=False, isMpChat=True)
 def receive_msg(msg):
+    user_msg = itchat.search_friends(userName=msg['FromUserName'])
     # 处理发送接收的消息
     send_receive_msg(msg)
-    msg_from_user_info = itchat.search_friends(userName=msg['FromUserName'])
-    msg_from_user_info['Sex'] + '-' + msg_from_user_info['RemarkName'] + '-' + msg_from_user_info['NickName']
     if msg['ToUserName'] == 'filehelper':
         if '退出' in msg['Content']:
             print(msg['Content'])
@@ -35,6 +35,7 @@ def get_note(msg):
 
 # 登陆成功函数调用
 def lc():
+    me = itchat.search_friends()
     itchat.send("欢迎使用", toUserName='filehelper')
 
 
@@ -53,5 +54,5 @@ if __name__ == '__main__':
     退出 赋值方法到 exitCallback
     '''
 
-    itchat.auto_login(hotReload=True)
+    itchat.auto_login(hotReload=True, loginCallback=lc, exitCallback=ec)
     itchat.run()

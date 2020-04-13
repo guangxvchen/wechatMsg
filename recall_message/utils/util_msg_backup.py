@@ -15,6 +15,10 @@ def note_type(msg):
     if '撤回了一条消息' in msg['Content']:
         if '你撤回了一条消息' not in msg['Content']:
             _push_backup_msg(msg)
+            # 更新数据状态
+        else:
+            print('更新数据')
+            # 更新数据状态
 
 
 # 消息备份

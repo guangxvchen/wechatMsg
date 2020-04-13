@@ -34,7 +34,7 @@ def alive():
 # 定时
 def keep_alive():
     global timer
-    timer = threading.Timer(60 * 60 * 12, alive)  # 每 12 小时执行一次
+    timer = threading.Timer(60 * 60 * 6, alive)  # 每 12 小时执行一次
     timer.start()
 
 
